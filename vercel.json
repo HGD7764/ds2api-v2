@@ -1,13 +1,32 @@
+
 {
-  "version": 2,
-  "buildCommand": "npm ci --prefix webui && npm run build --prefix webui",
-  "outputDirectory": "static",
-  "functions": {
-    "api/chat-stream.js": {
-      "maxDuration": 300
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "app": {
+      "root": ".",
+      "runtime": "container",
+      "functions": {
+        "api/chat-stream.js": {
+          "maxDuration": 300
+        },
+        "api/index.go": {
+          "maxDuration": 300
+        }
+      },
+      "bindings": [
+        {
+          "type": "service",
+          "service": "webui",
+          "format": "url",
+          "env": "WEBUI_URL"
+        }
+      ]
     },
-    "api/index.go": {
-      "maxDuration": 300
+    "webui": {
+      "root": "webui",
+      "framework": "vite",
+      "buildCommand": "npm ci && npm run build",
+      "outputDirectory": "static"
     }
   },
   "rewrites": [
@@ -19,83 +38,123 @@
           "key": "__go"
         }
       ],
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/v1/chat/completions",
-      "destination": "/api/chat-stream"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/login",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/verify",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/config",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/config/(.*)",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/settings",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/settings/(.*)",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/keys(.*)",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/accounts(.*)",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/queue/status",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/import",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/test",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/vercel/(.*)",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/export",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/version",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/chat-history(.*)",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/proxies(.*)",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/dev/raw-samples/(.*)",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin/dev/captures(.*)",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     },
     {
       "source": "/admin",
@@ -111,7 +170,9 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/api/index"
+      "destination": {
+        "service": "app"
+      }
     }
   ],
   "headers": [
