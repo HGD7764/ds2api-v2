@@ -1,4 +1,3 @@
-
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "services": {
@@ -157,16 +156,24 @@
       }
     },
     {
-      "source": "/admin",
-      "destination": "/admin/index.html"
+      "source": "/admin/assets/(.*)",
+      "destination": {
+        "service": "webui"
+      }
     },
     {
-      "source": "/admin/assets/(.*)",
-      "destination": "/admin/assets/$1"
+      "source": "/admin",
+      "destination": {
+        "service": "webui",
+        "path": "/index.html"
+      }
     },
     {
       "source": "/admin/(.*)",
-      "destination": "/admin/index.html"
+      "destination": {
+        "service": "webui",
+        "path": "/index.html"
+      }
     },
     {
       "source": "/(.*)",
